@@ -11,5 +11,6 @@ namespace ShareMusic.Models
         public string ListenSald { get; set; }
         public string PlayingSald { get; set; }
         public DateTime FirstConnectionExpired { get; set; }
+        public string OwnerGuid { get; set; }
     }
 }
