@@ -6,10 +6,12 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using ShareMusic.Data;
 using ShareMusic.Hubs;
 
 namespace ShareMusic
@@ -36,8 +38,13 @@ namespace ShareMusic
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .AllowAnyOrigin();
-                        // .WithOrigins("http://localhost:3000/");
+                    // .WithOrigins("http://localhost:3000/");
                 });
+            });
+            services.AddDbContext<ApplicationContext>(options =>
+            {
+                string connection = Configuration.GetConnectionString("DefaultConnection");
+                options.UseSqlite(connection);
             });
         }
 
@@ -55,6 +62,8 @@ namespace ShareMusic
 
             app.UseAuthorization();
 
+            app.UseStaticFiles();
+
             app.UseCors("Policy");
 
             app.UseEndpoints(endpoints =>
@@ -62,6 +71,20 @@ namespace ShareMusic
                 endpoints.MapHub<ConcertHub>("/concert");
                 endpoints.MapControllers();
             });
+
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                var dbContext = serviceScope.ServiceProvider.GetService<ApplicationContext>();
+                try 
+                {
+                    dbContext.Database.Migrate();
+                }
+                catch
+                {
+                    
+                }
+                
+            }
         }
     }
 }
