@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using ShareMusic.Hubs;
 
 namespace ShareMusic
 {
@@ -26,6 +27,18 @@ namespace ShareMusic
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddSignalR();
+            services.AddCors(opt =>
+            {
+                opt.AddPolicy("Policy", settings =>
+                {
+                    settings
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowAnyOrigin();
+                        // .WithOrigins("http://localhost:3000/");
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -36,14 +49,17 @@ namespace ShareMusic
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
 
             app.UseRouting();
 
             app.UseAuthorization();
 
+            app.UseCors("Policy");
+
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHub<ConcertHub>("/concert");
                 endpoints.MapControllers();
             });
         }

@@ -1,15 +1,13 @@
 import React from "react";
 import "./App.css";
 import Header from "./components/header/header";
-import Piano from "./components/piano/piano";
+import Room from "./components/room/room";
 
 function App() {
   return (
     <div className="App">
       <Header />
-      <div className="center-container">
-        <Piano />
-      </div>
+      <Room/>
     </div>
   );
 }
