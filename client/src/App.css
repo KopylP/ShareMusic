@@ -1,0 +1,17 @@
+.center-piano {
+  height: 100%;
+}
+.App {
+  height: 100%;
+}
+html {
+  height: 100%;
+}
+
+.center-container {
+    height: calc(100vh - 60px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+

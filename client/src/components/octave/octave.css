@@ -1,0 +1,19 @@
+.octave {
+    display: flex;
+    align-items: stretch;
+    height: 150px;
+    width: 350px;
+    position: relative;
+}
+.white-key {
+    border: 1px solid black;
+    width: 100%;
+}
+
+.black-key {
+    width: 25px;
+    height: 100px;
+    background-color: black;
+    position: absolute;
+    float: left;
+}
