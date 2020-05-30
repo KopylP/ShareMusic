@@ -13,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using ShareMusic.Data;
 using ShareMusic.Hubs;
+using ShareMusic.Repositories;
 
 namespace ShareMusic
 {
@@ -46,6 +47,8 @@ namespace ShareMusic
                 string connection = Configuration.GetConnectionString("DefaultConnection");
                 options.UseSqlite(connection);
             });
+
+            services.AddScoped<IRoomRepository, RoomRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
