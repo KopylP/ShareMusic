@@ -61,6 +61,8 @@ namespace ShareMusic
 
             // app.UseHttpsRedirection();
 
+            app.UseStatusCodePagesWithReExecute("/errors/{0}");
+
             app.UseRouting();
 
             app.UseAuthorization();

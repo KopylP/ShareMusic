@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
+using ShareMusic.Api.ApiErrors;
 using ShareMusic.Extensions;
 using ShareMusic.Models;
 using ShareMusic.Repositories;
@@ -41,16 +42,13 @@ namespace ShareMusic.Controllers
         public async Task<IActionResult> Post([FromBody] RoomViewModel roomModel)
         {
             if (roomModel == null)
-            {
-                //TODO Handle Error
-                return StatusCode(500);
-            }
+                return StatusCode(500, "A room model is null");
+
             var existRoom = await _roomRepository.GetAsync(p => p.Name == roomModel.Name);
+
             if (existRoom.Any())
-            {
-                //TODO Handle Error
-                return StatusCode(500);
-            }
+                return StatusCode(500, new InternalServerError("A room with the same name already exists"));
+
             var room = new Room
             {
                 Name = roomModel.Name,
@@ -74,8 +72,8 @@ namespace ShareMusic.Controllers
         public async Task<IActionResult> PlayToken(int id, [FromQuery] string token)
         {
             var room = await _roomRepository.FindByIdAsync(id);
-            if (room == null) return NotFound();//TODO Handle error
-            if (room.OwnerGuid != token) return Unauthorized();//TODO Handle error
+            if (room == null) return NotFound(new NotFoundError("Room not found"));
+            if (room.OwnerGuid != token) return Unauthorized(new UnauthorizedError("You have no access to the room"));
             return Ok(new { token = $"{room.Name}{room.PlayingSald}".ComputeSha256Hash() });
         }
 
@@ -89,8 +87,8 @@ namespace ShareMusic.Controllers
         public async Task<IActionResult> ListenToken(int id, [FromQuery] string token)
         {
             var room = await _roomRepository.FindByIdAsync(id);
-            if (room == null) return NotFound();//TODO Handle error
-            if (room.OwnerGuid != token) return Unauthorized();//TODO Handle error
+            if (room == null) return NotFound(new NotFoundError("Room not found"));
+            if (room.OwnerGuid != token) return Unauthorized(new UnauthorizedError("You have no access to the room"));
             return Ok(new { token = $"{room.Name}{room.ListenSald}".ComputeSha256Hash() });
         }
 
