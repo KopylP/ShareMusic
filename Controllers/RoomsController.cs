@@ -46,6 +46,8 @@ namespace ShareMusic.Controllers
             if (roomModel == null || roomModel.Name == null)
                 return StatusCode(500, new InternalServerError("A room model is null"));
 
+            roomModel.Name = roomModel.Name.Trim();
+
             var existRoom = await _roomRepository.GetAsync(p => p.Name == roomModel.Name);
 
             if (existRoom.Any())
