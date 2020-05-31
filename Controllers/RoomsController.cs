@@ -15,10 +15,12 @@ namespace ShareMusic.Controllers
     [Route("api/[controller]")]
     public class RoomsController : ControllerBase
     {
-        IRoomRepository _roomRepository;
-        public RoomsController(IRoomRepository roomRepository)
+        private RoomRepository _roomRepository;
+        private ParticipantRepository _participantRepository;
+        public RoomsController(RoomRepository roomRepository, ParticipantRepository participantRepository)
         {
             _roomRepository = roomRepository;
+            _participantRepository = participantRepository;
         }
 
         /// <summary>
@@ -48,10 +50,18 @@ namespace ShareMusic.Controllers
 
             roomModel.Name = roomModel.Name.Trim();
 
-            var existRoom = await _roomRepository.GetAsync(p => p.Name == roomModel.Name);
+            var existRooms = await _roomRepository.GetAsync(p => p.Name == roomModel.Name);
 
-            if (existRoom.Any())
-                return StatusCode(500, new InternalServerError("A room with the same name already exists"));
+            if (existRooms.Any())
+            {
+                var existRoom = existRooms.FirstOrDefault();
+                var participants = await _participantRepository.GetAsync(p => p.RoomId == existRoom.Id);
+                if (!participants.Any() && existRoom.FirstConnectionExpired < DateTime.Now)
+                    await _roomRepository.RemoveAsync(existRoom);
+                else
+                    return StatusCode(500, new InternalServerError("A room with the same name already exists"));
+            }
+
 
             var room = new Room
             {

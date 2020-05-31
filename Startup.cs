@@ -48,7 +48,8 @@ namespace ShareMusic
                 options.UseSqlite(connection);
             });
 
-            services.AddScoped<IRoomRepository, RoomRepository>();
+            services.AddScoped<RoomRepository>();
+            services.AddScoped<ParticipantRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
