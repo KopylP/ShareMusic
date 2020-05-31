@@ -13,10 +13,10 @@ namespace ShareMusic.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class RoomController : ControllerBase
+    public class RoomsController : ControllerBase
     {
         IRoomRepository _roomRepository;
-        public RoomController(IRoomRepository roomRepository)
+        public RoomsController(IRoomRepository roomRepository)
         {
             _roomRepository = roomRepository;
         }
@@ -30,7 +30,9 @@ namespace ShareMusic.Controllers
         public async Task<IActionResult> Get(int id)
         {
             var room = await _roomRepository.FindByIdAsync(id);
-            return Ok(room);
+            var roomModel = room.Adapt<RoomViewModel>();
+            roomModel.OwnerGuid = null;
+            return Ok(roomModel);
         }
 
         /// <summary>
@@ -41,8 +43,8 @@ namespace ShareMusic.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] RoomViewModel roomModel)
         {
-            if (roomModel == null)
-                return StatusCode(500, "A room model is null");
+            if (roomModel == null || roomModel.Name == null)
+                return StatusCode(500, new InternalServerError("A room model is null"));
 
             var existRoom = await _roomRepository.GetAsync(p => p.Name == roomModel.Name);
 
