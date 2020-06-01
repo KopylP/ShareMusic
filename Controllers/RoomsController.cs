@@ -45,10 +45,13 @@ namespace ShareMusic.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] RoomViewModel roomModel)
         {
-            if (roomModel == null || roomModel.Name == null)
-                return StatusCode(500, new InternalServerError("A room model is null"));
+            if (roomModel == null)
+                return StatusCode(500, new InternalServerError("Room model is null"));
 
             roomModel.Name = roomModel.Name.Trim();
+
+            if (roomModel.Name == string.Empty)
+                return StatusCode(500, new InternalServerError("Room name cannot be empty"));
 
             var existRooms = await _roomRepository.GetAsync(p => p.Name == roomModel.Name);
 

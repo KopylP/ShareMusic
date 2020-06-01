@@ -64,13 +64,9 @@ namespace ShareMusic.Hubs
             string confirmToken = null;
             //check token
             if (enterRoomModel.ParticipantType == ParticipantType.Player)
-            {
                 confirmToken = await _roomRepo.GetPlayerTokenByIdAsync(enterRoomModel.RoomId);
-            }
             else if (enterRoomModel.ParticipantType == ParticipantType.Listener)
-            {
                 confirmToken = await _roomRepo.GetListenTokenByIdAsync(enterRoomModel.RoomId);
-            }
 
             //send error if participant`s type is invalid 
             if (confirmToken == null)
