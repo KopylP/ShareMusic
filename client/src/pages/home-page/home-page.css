@@ -74,30 +74,22 @@
     transition: opacity 300ms, max-width 300ms;
   }
 
-  .errorContainer {
+  .enter-room-container {
     display: flex;
-    justify-content: center;
     align-items: center;
     position: relative;
   }
 
-  .error-message:after {
-    content: "*A room already exists"!important;
+  .error-message {
     display: block;
     word-wrap: normal;
     position: absolute;
-    bottom: -12px;
+    bottom: -17px;
     left: 0;
+    font-weight: 500;
+    padding: 1px;
+    background-color: rgba(0, 0, 0, 0.5);
     color: red!important;
   }
 
-  .error-message-none:after {
-    content: "*Field is empty"!important;
-    display: block;
-    word-wrap: normal;
-    position: absolute;
-    bottom: -12px;
-    left: 0;
-    color: red!important; 
-  }
   

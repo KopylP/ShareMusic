@@ -9,22 +9,21 @@ export default class HomePage extends Component {
 
   state = {
     enterName: false,
-    error: false,
+    error: null,
     roomName: "",
   };
 
   onRoomCreated = (room) => {
-    console.log(room);
     this.props.history.push({
-      pathname: '/musician',
+      pathname: "/musician",
       search: `?owner=${room.ownerGuid}`,
-    })
+    });
   };
 
   onRoomCreatedError = (error) => {
-    if (error.response && error.response.status === 500) {
+    if (error.response) {
       this.setState({
-        error: true,
+        error: error.response.data.message,
       });
     }
   };
@@ -36,12 +35,6 @@ export default class HomePage extends Component {
         enterName: true,
       });
     } else {
-      if(roomName === "") {
-        this.setState({
-          error: true
-        });
-        return;
-      }
       this.roomService
         .createRoom(roomName)
         .then(this.onRoomCreated)
@@ -52,16 +45,11 @@ export default class HomePage extends Component {
   onHandleChangeRoomName = (e) => {
     this.setState({
       roomName: e.target.value,
-      error: false
     });
   };
 
   render() {
-    const { enterName, error, roomName } = this.state;
-
-    let errorClass = null;
-    if (error && roomName === "") errorClass = "error-message-none";
-    else if (error) errorClass = "error-message";
+    const { enterName, error } = this.state;
 
     return (
       <div className="home-page">
@@ -69,7 +57,7 @@ export default class HomePage extends Component {
         <div className="options">
           <h1>Wanna play?</h1>
           <div className="options-buttons">
-            <div className={`errorContainer ${errorClass}`}>
+            <div className={`enter-room-container`}>
               <CSSTransition
                 timeout={300}
                 classNames="input-animate"
@@ -92,6 +80,7 @@ export default class HomePage extends Component {
               >
                 Create room
               </button>
+              <div className="error-message">{error}</div>
             </div>
           </div>
         </div>
