@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export default class RoomService {
-  _baseUrl = "http://localhost:5000/api/";
+  _baseUrl = "http://localhost:5000/api/rooms/";
 
   async _getRequest(path) {
     const response = await axios.get(`${this._baseUrl}${path}`);
@@ -14,8 +14,12 @@ export default class RoomService {
   }
 
   async createRoom(roomName) {
-    return await this._postRequest("rooms", {
+    return await this._postRequest("", {
       Name: roomName,
     });
+  }
+
+  async getPlayerToken(roomId, ownerId) {
+    return await this._getRequest(`${roomId}/token/play?token=${ownerId}`);
   }
 }

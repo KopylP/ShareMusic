@@ -3,8 +3,9 @@ import "./home-page.css";
 import VideoBackground from "./video-background/video-background";
 import { CSSTransition } from "react-transition-group";
 import RoomService from "../../services/room-service";
+import WithRoom from "../../hoc-helpers/with-room";
 
-export default class HomePage extends Component {
+class HomePage extends Component {
   roomService = new RoomService();
 
   state = {
@@ -14,11 +15,17 @@ export default class HomePage extends Component {
   };
 
   onRoomCreated = (room) => {
-    this.props.history.push({
-      pathname: "/musician",
-      search: `?owner=${room.ownerGuid}`,
-    });
+    const { updateRoom } = this.props;
+    updateRoom(room);
   };
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.room !== this.props.room && this.props.room !== null) {
+      this.props.history.push({
+        pathname: "/musician",
+      });
+    }
+  }
 
   onRoomCreatedError = (error) => {
     if (error.response) {
@@ -49,8 +56,7 @@ export default class HomePage extends Component {
   };
 
   render() {
-    const { enterName, error } = this.state;
-
+    const { enterName, error, room } = this.state;
     return (
       <div className="home-page">
         <VideoBackground />
@@ -88,3 +94,5 @@ export default class HomePage extends Component {
     );
   }
 }
+
+export default WithRoom(HomePage);
