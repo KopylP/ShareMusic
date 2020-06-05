@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import RoomService from "../services/room-service";
 import WithRoom from "./with-room";
+import Spinner from "../spinner/spinner";
 function WithToken(Wrapper) {
   return class extends Component {
     roomService = new RoomService();
@@ -27,7 +28,9 @@ function WithToken(Wrapper) {
     };
 
     componentDidMount() {
-      this.update();
+      setTimeout(() => {
+        this.update();
+      }, 500);
     }
 
     update() {
@@ -64,7 +67,7 @@ function WithToken(Wrapper) {
     render() {
       const { token, roomId } = this.state;
       return token == null ? (
-        <div>loading</div>
+        <Spinner />
       ) : (
         <Wrapper {...this.props} token={token} roomId={roomId} />
       );
