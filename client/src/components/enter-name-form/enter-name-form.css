@@ -1,0 +1,65 @@
+.enter-name-form {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  position: absolute;
+  align-items: center;
+  justify-content: center;
+  background-color: #eee;
+}
+
+.enter-name-form .center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: #ffffff;
+  -webkit-box-shadow: -15px 13px 9px -5px rgba(173, 173, 173, 0.77);
+  -moz-box-shadow: -15px 13px 9px -5px rgba(173, 173, 173, 0.77);
+  box-shadow: -15px 13px 9px -5px rgba(173, 173, 173, 0.77);
+  padding: 15px;
+}
+
+.enter-name-form .lets-music {
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.enter-name-form .items-container {
+  display: flex;
+  width: 100%;
+}
+
+.enter-name-form i:hover {
+  color: #0164c7 !important;
+  position: relative;
+}
+
+.enter-name-form i:hover::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 0;
+    margin: 14px 2px;
+    border-radius: 50%;
+    -webkit-box-shadow: 0px 0px 13px 2px #0275d8;
+    box-shadow: 0px 0px 13px 2px #0275d8;
+}
+
+.enter-name-form input {
+  width: 100%;
+  border-color: #0275d8;
+}
+
+.enter-name-form h2 {
+  text-align: center;
+}
+
+.enter-name-form i {
+  font-size: 10em;
+  margin-bottom: 20px;
+  transition-duration: 200ms;
+}

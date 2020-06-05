@@ -22,7 +22,7 @@
     color: white;
 }
 
-.form-control:valid {
+.home-page .form-control:valid {
     background-color: rgba(0, 0, 0, 0.5);
     color: white;
 }
@@ -74,13 +74,13 @@
     transition: opacity 300ms, max-width 300ms;
   }
 
-  .enter-room-container {
+  .home-page .enter-room-container {
     display: flex;
     align-items: center;
     position: relative;
   }
 
-  .error-message {
+  .home-page .error-message {
     display: block;
     word-wrap: normal;
     position: absolute;
