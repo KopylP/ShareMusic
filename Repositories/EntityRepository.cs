@@ -16,10 +16,11 @@ namespace ShareMusic.Repositories
             this.context = context;
         }
 
-        public async Task CreateAsync(TEntity item)
+        public async Task CreateAsync(TEntity item, bool commit = true)
         {
             context.Set<TEntity>().Add(item);
-            await SaveChangesAsync();
+            if(commit)
+                await SaveChangesAsync();
         }
 
         public async Task<TEntity> FindByIdAsync(int id)
@@ -38,10 +39,11 @@ namespace ShareMusic.Repositories
             return list.Where(predicate).ToList();
         }
 
-        public async Task RemoveAsync(TEntity item)
+        public async Task RemoveAsync(TEntity item, bool commit = true)
         {
             context.Entry(item).State = EntityState.Deleted;
-            await SaveChangesAsync();
+            if(commit)
+                await SaveChangesAsync();
         }
 
         public async Task SaveChangesAsync()
@@ -49,10 +51,11 @@ namespace ShareMusic.Repositories
             await context.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(TEntity item)
+        public async Task UpdateAsync(TEntity item, bool commit = true)
         {
             context.Entry(item).State = EntityState.Modified;
-            await SaveChangesAsync();
+            if(commit)
+                await SaveChangesAsync();
         }
     }
 }

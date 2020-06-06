@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import "./enter-name-form.css";
 
 export default function EnterNameForm({ onNameSubmit = (p) => p }) {
-  const [name, setName] = useState(null);
+  const [name, setName] = useState("");
   const [error, setError] = useState(false);
 
   const onSubmit = (e) => {
-    if (name !== null) onNameSubmit(name);
+    if (name !== "") onNameSubmit(name);
     else setError(true);
   };
 

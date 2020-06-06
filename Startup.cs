@@ -30,7 +30,9 @@ namespace ShareMusic
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddSignalR();
+            services.AddSignalR(o => {
+                o.EnableDetailedErrors = true;
+            });
             services.AddCors(opt =>
             {
                 opt.AddPolicy("Policy", settings =>
