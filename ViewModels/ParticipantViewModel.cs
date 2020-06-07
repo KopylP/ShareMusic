@@ -6,5 +6,6 @@ namespace ShareMusic.ViewModels
         public string ParticipantType { get; set; }
         public string ConnectionId { get; set; }
         public int RoomId { get; set; }
+        public string RoomName { get; set; }
     }
 }

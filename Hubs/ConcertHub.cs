@@ -19,14 +19,27 @@ namespace ShareMusic.Hubs
             _roomRepo = roomRepository;
             _participantRepo = participantRepository;
         }
-        public async Task PressKey(string key)
+        public async Task PressKey(string roomName, string key)
         {
-            await Clients.Others.SendAsync("KeyPressed", key);
+            await Clients.Group(roomName).SendAsync("KeyPressed", new
+            {
+                ConnectionId = Context.ConnectionId,
+                Key = key
+            });
         }
 
-        public async Task LeaveKey(string key)
+        public async Task LeaveKey(string roomName, string key)
         {
-            await Clients.Others.SendAsync("KeyLeaved", key);
+            await Clients.Group(roomName).SendAsync("KeyLeaved", new
+            {
+                ConnectionId = Context.ConnectionId,
+                Key = key
+            });
+        }
+
+        public string GetConnectionId()
+        {
+            return Context.ConnectionId;
         }
 
         public override async Task OnDisconnectedAsync(Exception exception)
@@ -120,7 +133,9 @@ namespace ShareMusic.Hubs
                 Name = enterRoomModel.Name
             };
             await _participantRepo.CreateAsync(participant, false);
-            await Clients.Group(room.Name).SendAsync("Join", participant.Adapt<ParticipantViewModel>());
+            var participantViewModel = participant.Adapt<ParticipantViewModel>();
+            participantViewModel.RoomName = room.Name;
+            await Clients.Group(room.Name).SendAsync("Join", participantViewModel);
             await _participantRepo.SaveChangesAsync();
         }
     }

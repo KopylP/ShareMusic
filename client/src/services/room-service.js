@@ -1,7 +1,8 @@
+import {apiUrl} from "../config";
 import axios from "axios";
 
 export default class RoomService {
-  _baseUrl = "http://localhost:5000/api/rooms/";
+  _baseUrl = `${apiUrl}api/rooms/`;
 
   async _getRequest(path) {
     const response = await axios.get(`${this._baseUrl}${path}`);

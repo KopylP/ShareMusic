@@ -1,21 +1,16 @@
 import * as signalR from "@aspnet/signalr";
+import { apiUrl } from "../config";
 
 export default class ConcertHubService {
   constructor() {
     this.connection = new signalR.HubConnectionBuilder()
-      .withUrl("http://localhost:5000/concert", {
+      .withUrl(`${apiUrl}concert`, {
         skipNegotiation: true,
         transport: signalR.HttpTransportType.WebSockets,
       })
       .configureLogging(signalR.LogLevel.Information)
       .build();
   }
-
-  musicianJoin = (callback = (f) => f) => {
-    this.connection.on("Notify", (data) => {
-      callback(data);
-    });
-  };
 
   onJoin = (callback = f => f) => {
     this.connection.on("Join", (participant) => callback(participant));
@@ -33,8 +28,8 @@ export default class ConcertHubService {
     this.connection.invoke("EnterRoom", enterRoomModel);
   };
 
-  pressKey = (key) => {
-    this.connection.invoke("PressKey", key);
+  pressKey = (roomName, key) => {
+    this.connection.invoke("PressKey", roomName, key);
   };
 
   onKeyPressed = (callback = (f) => f) => {
@@ -43,8 +38,8 @@ export default class ConcertHubService {
     });
   };
 
-  leaveKey = (key) => {
-    this.connection.invoke("LeaveKey", key);
+  leaveKey = (roomName, key) => {
+    this.connection.invoke("LeaveKey", roomName, key);
   };
 
   onKeyLeaved = (callback = (f) => f) => {
@@ -52,6 +47,10 @@ export default class ConcertHubService {
       callback(data);
     });
   };
+
+  GetConnectionId =  async () => {
+    return await this.connection.invoke("GetConnectionId");
+  }
 
   start = async () => {
     await this.connection.start();

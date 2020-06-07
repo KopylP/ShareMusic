@@ -3,7 +3,7 @@ import Octave from "../octave/octave";
 import "./piano.css";
 import SynthService from "../../services/synth-service";
 
-export default function Piano({onKeyPress, onKeyLeave}) {
+export default function Piano({onKeyPress = f => f, onKeyLeave = f => f}) {
 
   const synthService = new SynthService();
 
